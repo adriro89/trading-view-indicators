@@ -1,0 +1,37 @@
+//@version=5
+indicator("RSI  Strategy + EMA 10, 50", shorttitle="RSI Strategy with EMA 10, 50", overlay=true)
+
+// RSI Params
+rsi_length = input.int(14, title="RSI Length")
+overbought_level = input.int(70, title="Overbought Level")
+oversold_level = input.int(30, title="Oversold Level")
+
+// RSI Calculation
+rsi = ta.rsi(close, rsi_length)
+
+// Buy and sell conditions
+buy_signal = ta.crossover(rsi, oversold_level)
+sell_signal = ta.crossunder(rsi, overbought_level)
+
+// Colors customization
+buy_color = color.green
+sell_color = color.red
+
+// Plot sell and buy signals
+plotshape(buy_signal, style=shape.triangleup, location=location.belowbar, color=buy_color, size=size.small, title="Buy Signal")
+plotshape(sell_signal, style=shape.triangledown, location=location.abovebar, color=sell_color, size=size.small, title="Sell Signal")
+
+// Plot RSI
+plot(rsi, color=color.blue, linewidth=2, title="RSI")
+
+// Overbought and oversold fill in
+hline(overbought_level, "Overbought Level", color=color.red, linestyle=hline.style_dotted)
+hline(oversold_level, "Oversold Level", color=color.green, linestyle=hline.style_dotted)
+
+// EMA 55 sessions calculation and plotting
+ema_55 = ta.ema(close, 55)
+plot(ema_55, color=color.yellow, linewidth=2, title="EMA 55")
+
+// EMA 55 sessions calculation and plotting
+ema_10 = ta.ema(close, 10)
+plot(ema_10, color=color.red, linewidth=2, title="EMA 10")
